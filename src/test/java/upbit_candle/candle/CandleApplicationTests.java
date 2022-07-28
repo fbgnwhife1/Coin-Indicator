@@ -13,11 +13,7 @@ class CandleApplicationTests {
 
     @Test
     void TickService() {
-        BigDecimal p1 = new BigDecimal("1_000_000");
-        BigDecimal c = new BigDecimal("5");
 
-        if(c.compareTo(p1) > 0) System.out.println(1);
-        else System.out.println(-1);
 
     }
 
