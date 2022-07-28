@@ -1,6 +1,7 @@
 package upbit_candle.candle.WebSocket;
 
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ public final class WsListener extends WebSocketListener {
     private Conclusion conclusion;
     private ConclusionEntity cResult;
     private final ConclusionService service;
+    private final BigDecimal p = new BigDecimal(1_000_000);
 
     @Autowired
     public WsListener(ConclusionService service){
@@ -72,6 +74,7 @@ public final class WsListener extends WebSocketListener {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid());
+                if(cResult.getReal_price().compareTo(p) < 0) break;
                 service.save(cResult);
 
                 System.out.println(tradeResult);

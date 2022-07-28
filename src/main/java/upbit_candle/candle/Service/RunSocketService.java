@@ -35,7 +35,7 @@ public class RunSocketService {
 //        WsListener webSocketListener = new WsListener();
 //        webSocketListener.setParameter(Conclusion.trade, List.of("KRW-BTC"));
 
-        List<Market> all = marketRepository.findAll();
+//        List<Market> all = marketRepository.findAll();
 //        ArrayList<String> list = new ArrayList<>();
 //        for(int i = 0; i < 15; i++){
 //                list.add(all.get(i).getMarket());
@@ -45,7 +45,6 @@ public class RunSocketService {
         webSocketListener.setParameter(Conclusion.trade, list);
 
         client.newWebSocket(request, webSocketListener);
-
         client.dispatcher().executorService().shutdown();
 
     }

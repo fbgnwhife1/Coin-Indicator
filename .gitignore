@@ -8,7 +8,7 @@ build/
 application.properties
 application-API-KEY.properties
 ApiKey
-
+test
 ### STS ###
 .apt_generated
 .classpath
