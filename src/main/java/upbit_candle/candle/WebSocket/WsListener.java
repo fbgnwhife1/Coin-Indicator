@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public final class WsListener extends WebSocketListener {
     private String json;
     private Conclusion conclusion;
     private ConclusionEntity cResult;
-    private final BigDecimal p = new BigDecimal(1_000_000);
+    private BigDecimal p;
 
     private final ConclusionService service;
     @Autowired
@@ -67,12 +68,14 @@ public final class WsListener extends WebSocketListener {
         System.out.println(jsonNode.toPrettyString());
     }
 
+    @SneakyThrows
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
         switch(conclusion) {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
-                cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid());
+                cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
+//                cResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), ConclusionEntity.class);
                 if(cResult.getReal_price().compareTo(p) < 0) break;
                 service.save(cResult);
 
@@ -97,9 +100,10 @@ public final class WsListener extends WebSocketListener {
 //        webSocket.close(NORMAL_CLOSURE_STATUS, null); // 없을 경우 끊임없이 서버와 통신함
     }
 
-    public void setParameter(Conclusion conclusion, List<String> codes) {
+    public void setParameter(Conclusion conclusion, List<String> codes, Long pivot) {
         this.conclusion = conclusion;
         this.json = gson.toJson(List.of(Ticket.of(UUID.randomUUID().toString()), Type.of(conclusion, codes)));
+        this.p = new BigDecimal(pivot);
     }
 
     private String getParameter() {

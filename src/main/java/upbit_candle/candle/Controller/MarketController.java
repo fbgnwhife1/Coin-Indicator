@@ -81,7 +81,7 @@ public class MarketController {
 
             marketRepository.saveAll(list);
             message.setData(list);
-            message.setMessage("OK");
+            message.setMessage("market 생성");
             message.setStatus(StatusEnum.OK);
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
 

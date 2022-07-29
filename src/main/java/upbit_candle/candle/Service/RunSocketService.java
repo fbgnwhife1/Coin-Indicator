@@ -19,7 +19,7 @@ public class RunSocketService {
 
     private final WsListener webSocketListener;
 
-    public void runSocket(List<String> marketList) throws InterruptedException{
+    public void runSocket(List<String> marketList, Long pivot) throws InterruptedException{
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
@@ -29,7 +29,7 @@ public class RunSocketService {
         //        ArrayList<String> list = ForTest.initTestData();
 //        webSocketListener.setParameter(Conclusion.trade, list);
 
-        webSocketListener.setParameter(Conclusion.trade, marketList);
+        webSocketListener.setParameter(Conclusion.trade, marketList, pivot);
         client.newWebSocket(request, webSocketListener);
         client.dispatcher().executorService().shutdown();
     }

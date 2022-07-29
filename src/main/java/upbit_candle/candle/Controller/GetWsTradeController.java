@@ -24,8 +24,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class TradeController {
-
+public class GetWsTradeController {
 
     private final RunSocketService runSocket;
     private final MarketRepository marketRepository;
@@ -40,13 +39,13 @@ public class TradeController {
     }
 
     @GetMapping("v2/recent-trade-stock")
-    public ResponseEntity<Message> loadTradeV2() {
+    public ResponseEntity<Message> loadTradeV2(@RequestParam(defaultValue = "1_000_000") String pivot) {
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         Message message = new Message();
 
         try {
-            runSocket.runSocket(ForTest.initTestData());
+            runSocket.runSocket(ForTest.initTestData(), Long.parseLong(pivot));
         }catch (Exception e){
             message.setMessage("잘못된 요청");
             message.setStatus(StatusEnum.BAD_REQUEST);
@@ -59,14 +58,15 @@ public class TradeController {
     }
 
     @GetMapping("v3/recent-trade-stock")
-    public ResponseEntity<Message> loadTradeV3(@RequestParam List<String> list) {
+    public ResponseEntity<Message> loadTradeV3(@RequestParam List<String> list,
+                                               @RequestParam(defaultValue = "1000000") String pivot) {
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         Message message = new Message();
 
         try {
             if(list.size() > 15) throw new IllegalArgumentException();
-            runSocket.runSocket(list);
+            runSocket.runSocket(list, Long.parseLong(pivot));
         }catch (Exception e){
             message.setMessage("잘못된 요청");
             message.setStatus(StatusEnum.BAD_REQUEST);
@@ -77,4 +77,7 @@ public class TradeController {
         message.setStatus(StatusEnum.OK);
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
+
+
+
 }
