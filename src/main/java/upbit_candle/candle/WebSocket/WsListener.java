@@ -36,9 +36,9 @@ public final class WsListener extends WebSocketListener {
     private String json;
     private Conclusion conclusion;
     private ConclusionEntity cResult;
-    private final ConclusionService service;
     private final BigDecimal p = new BigDecimal(1_000_000);
 
+    private final ConclusionService service;
     @Autowired
     public WsListener(ConclusionService service){
         this.service = service;

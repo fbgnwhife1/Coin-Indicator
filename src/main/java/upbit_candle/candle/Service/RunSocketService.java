@@ -18,32 +18,18 @@ import java.util.List;
 public class RunSocketService {
 
     private final WsListener webSocketListener;
-    private final MarketRepository marketRepository;
 
-    public void runSocket() throws InterruptedException{
+    public void runSocket(List<String> marketList) throws InterruptedException{
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url("wss://api.upbit.com/websocket/v1")
                 .build();
 
-//        WsListener webSocketListener = new WsListener();
+        //        ArrayList<String> list = ForTest.initTestData();
+//        webSocketListener.setParameter(Conclusion.trade, list);
 
-//        List<MarketEntity> all = marketRepository.findAll();
-//        for(int idx = 0; idx < all.size(); idx++) {
-//            ArrayList<String> list = new ArrayList<>();
-//            for (int i = 0; i < 15; i++) {
-//                list.add(all.get(i).getMarket());
-//            }
-//            webSocketListener.setParameter(Conclusion.trade, list);
-//
-//            client.newWebSocket(request, webSocketListener);
-//            client.dispatcher().executorService().shutdown();
-//        }
-
-        ArrayList<String> list = ForTest.initTestData();
-        webSocketListener.setParameter(Conclusion.trade, list);
-
+        webSocketListener.setParameter(Conclusion.trade, marketList);
         client.newWebSocket(request, webSocketListener);
         client.dispatcher().executorService().shutdown();
     }
