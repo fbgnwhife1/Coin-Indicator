@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,11 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
-import upbit_candle.candle.Market.ConclusionEntity;
-import upbit_candle.candle.Market.Result.Conclusion;
-import upbit_candle.candle.Market.Result.OrderBookResult;
-import upbit_candle.candle.Market.Result.TickResult;
-import upbit_candle.candle.Market.Result.TradeResult;
+import upbit_candle.candle.Entity.ConclusionEntity;
+import upbit_candle.candle.Entity.Result.Conclusion;
+import upbit_candle.candle.Entity.Result.OrderBookResult;
+import upbit_candle.candle.Entity.Result.TickResult;
+import upbit_candle.candle.Entity.Result.TradeResult;
 import upbit_candle.candle.Service.ConclusionService;
 
 /*

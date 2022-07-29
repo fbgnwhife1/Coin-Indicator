@@ -1,4 +1,4 @@
-package upbit_candle.candle.Market.Result;
+package upbit_candle.candle.Entity.Result;
 
 import lombok.Data;
 

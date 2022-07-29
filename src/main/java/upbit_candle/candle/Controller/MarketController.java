@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import upbit_candle.candle.Market.Market;
+import upbit_candle.candle.Entity.MarketEntity;
 import upbit_candle.candle.Repository.MarketRepository;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
@@ -44,7 +44,7 @@ public class MarketController {
 
             for(int i = 0; i < results.size(); i++){
                 JSONObject temp = (JSONObject) results.get(i);
-                Market market = gson.fromJson(temp.toJSONString(), Market.class);
+                MarketEntity market = gson.fromJson(temp.toJSONString(), MarketEntity.class);
                 marketRepository.save(market);
             }
 
@@ -71,11 +71,11 @@ public class MarketController {
             JSONParser jsonParser = new JSONParser();
             JSONArray results = (JSONArray) jsonParser.parse(result.toString());
 
-            ArrayList<Market> list = new ArrayList<>();
+            ArrayList<MarketEntity> list = new ArrayList<>();
 
             for(int i = 0; i < results.size(); i++){
                 JSONObject temp = (JSONObject) results.get(i);
-                Market market = gson.fromJson(temp.toJSONString(), Market.class);
+                MarketEntity market = gson.fromJson(temp.toJSONString(), MarketEntity.class);
                 list.add(market);
             }
 

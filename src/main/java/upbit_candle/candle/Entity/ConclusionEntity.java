@@ -1,14 +1,12 @@
-package upbit_candle.candle.Market;
+package upbit_candle.candle.Entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import upbit_candle.candle.Market.Result.Conclusion;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Entity(name = "Conclusion")
 @Data
