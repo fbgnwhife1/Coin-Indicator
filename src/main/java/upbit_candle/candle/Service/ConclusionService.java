@@ -17,17 +17,7 @@ public class ConclusionService {
         conclusionRepository.save(cResult);
     }
 
-//    public void runSocket() throws Exception{
-//        List<Market> all = marketRepository.findAll();
-//
-//        ArrayList<String> list = new ArrayList<>();
-//        for(int i = 0; i < 15; i++){
-//                list.add(all.get(i).getMarket());
-//        }
-//
-//        if(!list.isEmpty()){
-//            runSocket.run(list);
-//        }
-//    }
+    
+
 
 }

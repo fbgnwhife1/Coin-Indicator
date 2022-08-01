@@ -5,21 +5,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import upbit_candle.candle.Entity.MarketEntity;
 import upbit_candle.candle.Repository.MarketRepository;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
-import upbit_candle.candle.Service.ConclusionService;
 import upbit_candle.candle.Service.RunSocketService;
 import upbit_candle.candle.Service.forTest.ForTest;
+import upbit_candle.candle.WebSocket.OnExecuteCoin;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -65,7 +62,14 @@ public class GetWsTradeController {
         Message message = new Message();
 
         try {
-            if(list.size() > 15) throw new IllegalArgumentException();
+            //최대 15개
+            if(list.size() > 15) throw new Exception();
+            
+            //중복된 코인 제거
+            list.removeIf(target -> OnExecuteCoin.set.contains(target));
+            if(list.isEmpty()) throw new Exception();
+            OnExecuteCoin.set.addAll(list);      //싱글톤으로 실행중인 코인 확인
+            
             runSocket.runSocket(list, Long.parseLong(pivot));
         }catch (Exception e){
             message.setMessage("잘못된 요청");
@@ -75,6 +79,7 @@ public class GetWsTradeController {
 
         message.setMessage("OK");
         message.setStatus(StatusEnum.OK);
+        message.setData(list);
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 

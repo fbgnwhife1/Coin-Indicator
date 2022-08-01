@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,7 @@ import upbit_candle.candle.Entity.Result.Conclusion;
 import upbit_candle.candle.Entity.Result.OrderBookResult;
 import upbit_candle.candle.Entity.Result.TickResult;
 import upbit_candle.candle.Entity.Result.TradeResult;
+import upbit_candle.candle.Repository.ConclusionRepository;
 import upbit_candle.candle.Service.ConclusionService;
 
 /*
@@ -31,6 +33,7 @@ import upbit_candle.candle.Service.ConclusionService;
  */
 
 @Component
+@RequiredArgsConstructor
 public final class WsListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private Gson gson = new Gson();
@@ -38,12 +41,10 @@ public final class WsListener extends WebSocketListener {
     private Conclusion conclusion;
     private ConclusionEntity cResult;
     private BigDecimal p;
+    private List<String> codes;
 
     private final ConclusionService service;
-    @Autowired
-    public WsListener(ConclusionService service){
-        this.service = service;
-    }
+    private final ConclusionRepository repository;
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -77,8 +78,8 @@ public final class WsListener extends WebSocketListener {
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
 //                cResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), ConclusionEntity.class);
                 if(cResult.getReal_price().compareTo(p) < 0) break;
+//                if(repository.findAllByConclusion(cResult).size() != 0) break;  //중복 삽입 방지
                 service.save(cResult);
-
                 System.out.println(tradeResult);
                 break;
             case ticker:
@@ -102,6 +103,7 @@ public final class WsListener extends WebSocketListener {
 
     public void setParameter(Conclusion conclusion, List<String> codes, Long pivot) {
         this.conclusion = conclusion;
+        this.codes = codes;
         this.json = gson.toJson(List.of(Ticket.of(UUID.randomUUID().toString()), Type.of(conclusion, codes)));
         this.p = new BigDecimal(pivot);
     }
