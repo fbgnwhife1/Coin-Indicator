@@ -9,6 +9,8 @@ import upbit_candle.candle.WebSocketDto.SendDto;
 import upbit_candle.candle.WebSocketDto.WebSocketDto;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +32,12 @@ public class WebSocketService {
             }
         }
 
+        resultList.sort(new Comparator<SendDto>() {
+            @Override
+            public int compare(SendDto o1, SendDto o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
         return resultList;
     }
 }
