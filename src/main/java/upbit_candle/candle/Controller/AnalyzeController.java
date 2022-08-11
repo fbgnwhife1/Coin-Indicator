@@ -28,6 +28,7 @@ public class AnalyzeController {
         Message message = new Message();
 
         try {
+            if(period == null) period = 14;
             message.setData(analyzerService.RSI(marketId, period));
         }catch (Exception e){
             message.setMessage(e.getMessage());
