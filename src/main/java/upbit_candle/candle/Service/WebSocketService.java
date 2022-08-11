@@ -16,28 +16,28 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class WebSocketService {
-
-    private final ConclusionRepository repository;
-    private Gson gson = new Gson();
-
-    public List<SendDto> sendData(WebSocketDto list){
-        List<ConclusionEntity> marketList = list.getList();
-        List<SendDto> resultList = new ArrayList<>();
-
-        for(ConclusionEntity code : marketList){
-            List<ConclusionEntity> all = repository.findByCodeAndTime(code.getCode(), System.currentTimeMillis()-5000);
-            for (ConclusionEntity conclusionEntity : all) {
-                SendDto temp = new SendDto(conclusionEntity.getCode(), conclusionEntity.getReal_price(), conclusionEntity.getDate());
-                resultList.add(temp);
-            }
-        }
-
-        resultList.sort(new Comparator<SendDto>() {
-            @Override
-            public int compare(SendDto o1, SendDto o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
-        return resultList;
-    }
+//
+//    private final ConclusionRepository repository;
+//    private Gson gson = new Gson();
+//
+//    public List<SendDto> sendData(WebSocketDto list){
+//        List<ConclusionEntity> marketList = list.getList();
+//        List<SendDto> resultList = new ArrayList<>();
+//
+//        for(ConclusionEntity code : marketList){
+//            List<ConclusionEntity> all = repository.findByCodeAndTime(code.getCode(), System.currentTimeMillis()-5000);
+//            for (ConclusionEntity conclusionEntity : all) {
+//                SendDto temp = new SendDto(conclusionEntity.getCode(), conclusionEntity.getReal_price(), conclusionEntity.getDate());
+//                resultList.add(temp);
+//            }
+//        }
+//
+//        resultList.sort(new Comparator<SendDto>() {
+//            @Override
+//            public int compare(SendDto o1, SendDto o2) {
+//                return o1.getDate().compareTo(o2.getDate());
+//            }
+//        });
+//        return resultList;
+//    }
 }

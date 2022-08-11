@@ -11,6 +11,7 @@ public class OnMarketMap {
 
     private static volatile OnMarketMap object = new OnMarketMap();
     public static Map<String, ArrayList<WebSocketSession>> map = new ConcurrentHashMap<>();
+    public static Map<String, Long> pivotMap = new ConcurrentHashMap<String, Long>();
 
     private OnMarketMap(){}
 

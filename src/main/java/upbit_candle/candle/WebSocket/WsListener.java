@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -26,12 +25,11 @@ import org.springframework.web.socket.WebSocketSession;
 import upbit_candle.candle.Entity.ConclusionEntity;
 import upbit_candle.candle.Entity.Result.Conclusion;
 import upbit_candle.candle.Entity.Result.OrderBookResult;
-import upbit_candle.candle.Entity.Result.TickResult;
 import upbit_candle.candle.Entity.Result.TradeResult;
-import upbit_candle.candle.Repository.ConclusionRepository;
 import upbit_candle.candle.Service.ConclusionService;
 
 /*
+    ref.
     https://sas-study.tistory.com/432
  */
 
@@ -81,21 +79,17 @@ public final class WsListener extends WebSocketListener {
                 ArrayList<WebSocketSession> list = OnMarketMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
                 if(list.size() != 0){
                     for (WebSocketSession ws : list) {
-                        if(ws == null)
-                            continue;
+                        if(ws == null) continue;
+                        if(BigDecimal.valueOf(OnMarketMap.pivotMap.getOrDefault(ws.getId(), 0L))
+                                .compareTo(cResult.getReal_price()) > 0) continue;
+
                         ws.sendMessage(new TextMessage(gson.toJson(cResult)));
                     }
                 }
 
-//                cResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), ConclusionEntity.class);
                 if(cResult.getReal_price().compareTo(p) < 0) break;
-//                if(repository.findAllByConclusion(cResult).size() != 0) break;  //중복 삽입 방지
                 service.save(cResult);
                 System.out.println(tradeResult);
-                break;
-            case ticker:
-                TickResult result = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TickResult.class);
-                System.out.println(result);
                 break;
             case orderbook:
                 System.out.println(gson.fromJson(bytes.string(StandardCharsets.UTF_8), OrderBookResult.class));

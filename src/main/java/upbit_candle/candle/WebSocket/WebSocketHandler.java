@@ -46,6 +46,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         CLIENTS.remove(session.getId());
+        OnMarketMap.pivotMap.remove(session.getId());
     }
 
     @Override
@@ -53,6 +54,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String RequestJson = message.getPayload();
         Gson gson = new Gson();
         WebSocketDto list = gson.fromJson(RequestJson, WebSocketDto.class);
+        OnMarketMap.pivotMap.put(session.getId(), list.getPivot() != null ? list.getPivot() : 0L);
         ArrayList<ConclusionEntity> marketList = list.getList();
         ArrayList<String> clientMarkets = CLIENTS.getOrDefault(session.getId(), new ArrayList<>());
 

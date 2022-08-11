@@ -9,4 +9,5 @@ import java.util.ArrayList;
 @Data
 public class WebSocketDto {
     private ArrayList<ConclusionEntity> list;
+    private Long pivot;
 }
