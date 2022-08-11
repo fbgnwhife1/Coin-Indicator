@@ -1,4 +1,4 @@
-package upbit_candle.candle.Service;
+package upbit_candle.candle.WebSocket;
 
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;

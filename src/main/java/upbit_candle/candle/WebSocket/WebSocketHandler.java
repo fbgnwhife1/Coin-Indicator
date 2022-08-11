@@ -54,14 +54,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String RequestJson = message.getPayload();
         Gson gson = new Gson();
         WebSocketDto list = gson.fromJson(RequestJson, WebSocketDto.class);
-        OnMarketMap.pivotMap.put(session.getId(), list.getPivot() != null ? list.getPivot() : 0L);
+        OnMarketMap.pivotMap.put(session.getId(), list.getPivot() != null ? list.getPivot() : 0L);  //피벗 요청 마지막 기준
         ArrayList<ConclusionEntity> marketList = list.getList();
         ArrayList<String> clientMarkets = CLIENTS.getOrDefault(session.getId(), new ArrayList<>());
 
         for (ConclusionEntity conclusionEntity : marketList) {
             ArrayList<WebSocketSession> wsList = OnMarketMap.map.getOrDefault(conclusionEntity.getCode(), new ArrayList<>());
             clientMarkets.add(conclusionEntity.getCode());
-            wsList.add(session);
+            if(!wsList.contains(session)) wsList.add(session);  //session 중복 삽입 방지
             OnMarketMap.map.put(conclusionEntity.getCode(), wsList);
         }
         CLIENTS.put(session.getId(), clientMarkets);

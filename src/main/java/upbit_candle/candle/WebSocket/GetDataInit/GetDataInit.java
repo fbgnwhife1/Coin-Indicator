@@ -1,15 +1,12 @@
-package upbit_candle.candle.GetDataInit;
+package upbit_candle.candle.WebSocket.GetDataInit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import upbit_candle.candle.Entity.MarketEntity;
-import upbit_candle.candle.Repository.MarketRepository;
-import upbit_candle.candle.Service.RunSocketService;
+import upbit_candle.candle.WebSocket.RunSocketService;
 import upbit_candle.candle.Service.forTest.ForTest;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

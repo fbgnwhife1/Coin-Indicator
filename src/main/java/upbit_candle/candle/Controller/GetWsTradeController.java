@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import upbit_candle.candle.Repository.MarketRepository;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
-import upbit_candle.candle.Service.RunSocketService;
+import upbit_candle.candle.WebSocket.RunSocketService;
 import upbit_candle.candle.Service.forTest.ForTest;
 import upbit_candle.candle.WebSocket.OnExecuteCoin;
 

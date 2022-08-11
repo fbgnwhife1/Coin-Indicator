@@ -1,4 +1,4 @@
-package upbit_candle.candle.trade_search;
+package upbit_candle.candle.Service;
 
 import okhttp3.*;
 

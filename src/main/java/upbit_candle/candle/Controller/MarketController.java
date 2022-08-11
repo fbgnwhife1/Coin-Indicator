@@ -15,7 +15,7 @@ import upbit_candle.candle.Entity.MarketEntity;
 import upbit_candle.candle.Repository.MarketRepository;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
-import upbit_candle.candle.trade_search.MarketSearchSearvice;
+import upbit_candle.candle.Service.MarketSearchSearvice;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
