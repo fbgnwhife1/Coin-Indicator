@@ -26,9 +26,6 @@ public class RunSocketService {
                 .url("wss://api.upbit.com/websocket/v1")
                 .build();
 
-        //        ArrayList<String> list = ForTest.initTestData();
-//        webSocketListener.setParameter(Conclusion.trade, list);
-
         webSocketListener.setParameter(Conclusion.trade, marketList, pivot);
         client.newWebSocket(request, webSocketListener);
         client.dispatcher().executorService().shutdown();

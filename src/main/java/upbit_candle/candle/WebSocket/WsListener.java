@@ -3,6 +3,7 @@ package upbit_candle.candle.WebSocket;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,8 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import upbit_candle.candle.Entity.ConclusionEntity;
 import upbit_candle.candle.Entity.Result.Conclusion;
 import upbit_candle.candle.Entity.Result.OrderBookResult;
@@ -44,7 +47,6 @@ public final class WsListener extends WebSocketListener {
     private List<String> codes;
 
     private final ConclusionService service;
-    private final ConclusionRepository repository;
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -76,6 +78,15 @@ public final class WsListener extends WebSocketListener {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
+                ArrayList<WebSocketSession> list = OnMarketMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
+                if(list.size() != 0){
+                    for (WebSocketSession ws : list) {
+                        if(ws == null)
+                            continue;
+                        ws.sendMessage(new TextMessage(gson.toJson(cResult)));
+                    }
+                }
+
 //                cResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), ConclusionEntity.class);
                 if(cResult.getReal_price().compareTo(p) < 0) break;
 //                if(repository.findAllByConclusion(cResult).size() != 0) break;  //중복 삽입 방지

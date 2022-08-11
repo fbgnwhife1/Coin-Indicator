@@ -17,6 +17,7 @@ import upbit_candle.candle.Service.forTest.ForTest;
 import upbit_candle.candle.WebSocket.OnExecuteCoin;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,6 @@ import java.util.List;
 public class GetWsTradeController {
 
     private final RunSocketService runSocket;
-    private final MarketRepository marketRepository;
 
     @GetMapping("v1/recent-trade-stock/{marketId}")
     public ResponseEntity<Message> loadTradeV1(@PathVariable String marketId) {
@@ -58,7 +58,7 @@ public class GetWsTradeController {
     public ResponseEntity<Message> loadTradeV3(@RequestParam List<String> list,
                                                @RequestParam(defaultValue = "1000000") String pivot) {
         HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         Message message = new Message();
 
         try {
