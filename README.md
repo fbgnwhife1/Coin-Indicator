@@ -23,6 +23,14 @@ https://sigbtc.pro/derivatives
             }
  
  
+ ## Technologies Used
+* Java 1.8
+* Spring Boot 2.7.2
+* spring-boot-starter-websocket
+* okhttp3
+* Spring Data jpa
+ 
+ 
  ## Reference
  * https://sas-study.tistory.com/432
  * http://koreascience.or.kr/article/JAKO201922441756714.pdf
