@@ -16,9 +16,13 @@ import java.util.List;
 public interface ConclusionRepository extends JpaRepository<ConclusionEntity, String> {
     List<ConclusionEntity> findByCode(String code);
 
-    @Query(value = "select r from Conclusion r where r.trade_timestamp > :time and r.code = :code", nativeQuery = false)
+    @Query(value = "select r from Conclusion r where r.trade_timestamp > :time and r.code = :code")
     List<ConclusionEntity> findByCodeAndTime(String code, long time);
 
-    @Query(value = "select r from Conclusion r where r.code = :code and r.date between :start and :end", nativeQuery = false)
+    @Query(value = "select r" +
+            " from Conclusion r" +
+            " where r.code = :code " +
+            " and r.date between :start and :end" +
+            " group by r.date")
     List<ConclusionEntity> findAllByDateBetween(String code, Date start, Date end);
 }
