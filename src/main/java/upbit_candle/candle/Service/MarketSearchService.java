@@ -4,7 +4,7 @@ import okhttp3.*;
 
 import java.io.IOException;
 
-public class MarketSearchSearvice {
+public class MarketSearchService {
 
     public String search(){
         try{

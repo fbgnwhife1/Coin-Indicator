@@ -19,6 +19,9 @@ public class RunSocketService {
 
     private final WsListener webSocketListener;
 
+    /*
+    체결 내역
+     */
     public void runSocket(List<String> marketList, Long pivot) throws InterruptedException{
         OkHttpClient client = new OkHttpClient();
 
@@ -30,4 +33,16 @@ public class RunSocketService {
         client.newWebSocket(request, webSocketListener);
         client.dispatcher().executorService().shutdown();
     }
+
+//    public void runOrderBook() throws InterruptedException{
+//        OkHttpClient client = new OkHttpClient();
+//
+//        Request request = new Request.Builder()
+//                .url("wss://api.upbit.com/websocket/v1")
+//                .build();
+//
+//        webSocketListener.setParameter(Conclusion.trade);
+//        client.newWebSocket(request, webSocketListener);
+//        client.dispatcher().executorService().shutdown();
+//    }
 }

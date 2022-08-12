@@ -91,9 +91,6 @@ public final class WsListener extends WebSocketListener {
                 service.save(cResult);
                 System.out.println(tradeResult);
                 break;
-            case orderbook:
-                System.out.println(gson.fromJson(bytes.string(StandardCharsets.UTF_8), OrderBookResult.class));
-                break;
             default:
                 throw new RuntimeException("지원하지 않는 웹소켓 조회 유형입니다. : " + conclusion.getType());
         }
