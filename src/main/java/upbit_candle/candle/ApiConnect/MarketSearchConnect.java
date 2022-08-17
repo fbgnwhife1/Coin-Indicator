@@ -1,10 +1,10 @@
-package upbit_candle.candle.Service;
+package upbit_candle.candle.ApiConnect;
 
 import okhttp3.*;
 
 import java.io.IOException;
 
-public class MarketSearchService {
+public class MarketSearchConnect {
 
     public String search(){
         try{

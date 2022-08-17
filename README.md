@@ -7,6 +7,7 @@ https://sigbtc.pro/derivatives
 * 클라이언트가 가격 피벗 요청 가능 (完)
 * 시장 트렌드 & 지수 api (完)
 * 클라이언트 피벗 요청 마켓별로 설정 기능
+* 공포 탐욕 지수 api (完)
 * 호가잔량 이용 BSI 계산 (完)
 * 호가잔량정보를 이용한 데이트레이딩전략의 수익성 분석  
 (http://koreascience.or.kr/article/JAKO201922441756714.pdf)
@@ -32,6 +33,8 @@ https://sigbtc.pro/derivatives
 * QueryDsl
  
  ## Reference
+ * https://alternative.me/
  * https://sas-study.tistory.com/432
  * http://koreascience.or.kr/article/JAKO201922441756714.pdf
  * https://github.com/piomin/analyzer
+ * 디지털자산 공포-탐욕 지수 Methodology and rules | Dunamu Datavalue Team

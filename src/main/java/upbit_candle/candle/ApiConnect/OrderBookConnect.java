@@ -1,4 +1,4 @@
-package upbit_candle.candle.Service;
+package upbit_candle.candle.ApiConnect;
 
 
 import com.google.gson.Gson;
@@ -15,7 +15,7 @@ import upbit_candle.candle.Entity.Result.OrderBookResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderBookService {
+public class OrderBookConnect {
 
     public List<OrderBookResult> getOrderBook(String market){
         try{

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
 import upbit_candle.candle.Service.AnalyzerService;
-import upbit_candle.candle.Service.OrderBookService;
-import upbit_candle.candle.Service.forTest.ForTest;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -51,6 +49,25 @@ public class AnalyzeController {
 
         try {
             message.setData(analyzerService.BSI(marketId));
+        }catch (Exception e){
+            message.setMessage(e.getMessage());
+            message.setStatus(StatusEnum.BAD_REQUEST);
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+
+        message.setMessage("OK");
+        message.setStatus(StatusEnum.OK);
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("v1/analyze/fear-and-greed")
+    public ResponseEntity<Message> getFnG(){
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
+        Message message = new Message();
+
+        try {
+            message.setData(analyzerService.getFnG());
         }catch (Exception e){
             message.setMessage(e.getMessage());
             message.setStatus(StatusEnum.BAD_REQUEST);

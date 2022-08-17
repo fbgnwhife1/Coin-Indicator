@@ -15,7 +15,7 @@ import upbit_candle.candle.Entity.MarketEntity;
 import upbit_candle.candle.Repository.MarketRepository;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
-import upbit_candle.candle.Service.MarketSearchService;
+import upbit_candle.candle.ApiConnect.MarketSearchConnect;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class MarketController {
     @PostMapping("v1/market")
     public void loadMarketV1(){
 
-        MarketSearchService marketSearchSearvice = new MarketSearchService();
+        MarketSearchConnect marketSearchSearvice = new MarketSearchConnect();
 
         try {
             Gson gson = new Gson();
@@ -59,7 +59,7 @@ public class MarketController {
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         Message message = new Message();
-        MarketSearchService marketSearchSearvice = new MarketSearchService();
+        MarketSearchConnect marketSearchSearvice = new MarketSearchConnect();
 
         try {
             Gson gson = new Gson();
