@@ -35,8 +35,7 @@ public class AnalyzerService {
             prizes[i] = conclusionList.get(i).doubleValue();
         }
 
-        double result = rsi.count(prizes);
-        return result;
+        return rsi.count(prizes);
     }
 
     public double[] BSI(String market){

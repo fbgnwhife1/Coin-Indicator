@@ -40,9 +40,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         ArrayList<String> marketList = CLIENTS.get(session.getId());
-
-        for (String market : marketList) {
-            OnMarketMap.map.get(market).remove(session);
+        if(!marketList.isEmpty()) {
+            for (String market : marketList) {
+                OnMarketMap.map.get(market).remove(session);
+            }
         }
 
         CLIENTS.remove(session.getId());

@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
@@ -33,7 +32,7 @@ import upbit_candle.candle.Service.ConclusionService;
     https://sas-study.tistory.com/432
  */
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public final class WsListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
@@ -44,7 +43,11 @@ public final class WsListener extends WebSocketListener {
     private BigDecimal p;
     private List<String> codes;
 
-    private final ConclusionService service;
+    private ConclusionService service;
+
+    public WsListener(ConclusionService service) {
+        this.service = service;
+    }
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -58,9 +61,12 @@ public final class WsListener extends WebSocketListener {
         webSocket.cancel();
     }
 
+    @SneakyThrows
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         System.out.println("Socket Error : " + t.getMessage());
+        webSocket.send(getParameter());
+        Thread.sleep(2000);
     }
 
     @Override
@@ -89,7 +95,7 @@ public final class WsListener extends WebSocketListener {
 
                 if(cResult.getReal_price().compareTo(p) < 0) break;
                 service.save(cResult);
-                System.out.println(tradeResult);
+//                System.out.println(tradeResult);
                 break;
             default:
                 throw new RuntimeException("지원하지 않는 웹소켓 조회 유형입니다. : " + conclusion.getType());
@@ -103,10 +109,10 @@ public final class WsListener extends WebSocketListener {
 //        webSocket.close(NORMAL_CLOSURE_STATUS, null); // 없을 경우 끊임없이 서버와 통신함
     }
 
-    public void setParameter(Conclusion conclusion, List<String> codes, Long pivot) {
+    public void setParameter(String UUID, Conclusion conclusion, List<String> codes, Long pivot) {
         this.conclusion = conclusion;
         this.codes = codes;
-        this.json = gson.toJson(List.of(Ticket.of(UUID.randomUUID().toString()), Type.of(conclusion, codes)));
+        this.json = gson.toJson(List.of(Ticket.of(UUID), Type.of(conclusion, codes)));
         this.p = new BigDecimal(pivot);
     }
 
