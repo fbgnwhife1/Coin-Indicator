@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import okhttp3.Response;
@@ -23,7 +22,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import upbit_candle.candle.Entity.ConclusionEntity;
 import upbit_candle.candle.Entity.Result.Conclusion;
-import upbit_candle.candle.Entity.Result.OrderBookResult;
 import upbit_candle.candle.Entity.Result.TradeResult;
 import upbit_candle.candle.Service.ConclusionService;
 
@@ -82,11 +80,11 @@ public final class WsListener extends WebSocketListener {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
-                ArrayList<WebSocketSession> list = OnMarketMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
+                ArrayList<WebSocketSession> list = MarketAndSessionMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
                 if(list.size() != 0){
                     for (WebSocketSession ws : list) {
                         if(ws == null) continue;
-                        if(BigDecimal.valueOf(OnMarketMap.pivotMap.getOrDefault(ws.getId(), 0L))
+                        if(BigDecimal.valueOf(MarketAndSessionMap.pivotMap.getOrDefault(ws.getId(), 0L))
                                 .compareTo(cResult.getReal_price()) > 0) continue;
 
                         ws.sendMessage(new TextMessage(gson.toJson(cResult)));

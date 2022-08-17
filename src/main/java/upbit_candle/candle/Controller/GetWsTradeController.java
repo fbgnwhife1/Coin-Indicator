@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
 import upbit_candle.candle.WebSocket.RunSocketService;
-import upbit_candle.candle.WebSocket.OnExecuteCoin;
+import upbit_candle.candle.WebSocket.UpbitSocketMap;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -45,9 +45,9 @@ public class GetWsTradeController {
             if(list.size() > 15) throw new Exception();
             
             //중복된 코인 제거
-            list.removeIf(target -> OnExecuteCoin.set.contains(target));
+            list.removeIf(target -> UpbitSocketMap.set.contains(target));
             if(list.isEmpty()) throw new Exception();
-            OnExecuteCoin.set.addAll(list);      //싱글톤으로 실행중인 코인 확인
+            UpbitSocketMap.set.addAll(list);      //싱글톤으로 실행중인 코인 확인
             
             runSocket.runSocket(list, Long.parseLong(pivot));
         }catch (Exception e){

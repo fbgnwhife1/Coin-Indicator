@@ -29,12 +29,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
         ArrayList<String> marketList = CLIENTS.get(session.getId());
         if(!marketList.isEmpty()) {
             for (String market : marketList) {
-                OnMarketMap.map.get(market).remove(session);
+                MarketAndSessionMap.map.get(market).remove(session);
             }
         }
 
         CLIENTS.remove(session.getId());
-        OnMarketMap.pivotMap.remove(session.getId());
+        MarketAndSessionMap.pivotMap.remove(session.getId());
     }
 
     @Override
@@ -42,15 +42,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String RequestJson = message.getPayload();
         Gson gson = new Gson();
         WebSocketDto list = gson.fromJson(RequestJson, WebSocketDto.class);
-        OnMarketMap.pivotMap.put(session.getId(), list.getPivot() != null ? list.getPivot() : 0L);  //피벗 요청 마지막 기준
+        MarketAndSessionMap.pivotMap.put(session.getId(), list.getPivot() != null ? list.getPivot() : 0L);  //피벗 요청 마지막 기준
         ArrayList<ConclusionEntity> marketList = list.getList();
         ArrayList<String> clientMarkets = CLIENTS.getOrDefault(session.getId(), new ArrayList<>());
 
         for (ConclusionEntity conclusionEntity : marketList) {
-            ArrayList<WebSocketSession> wsList = OnMarketMap.map.getOrDefault(conclusionEntity.getCode(), new ArrayList<>());
+            ArrayList<WebSocketSession> wsList = MarketAndSessionMap.map.getOrDefault(conclusionEntity.getCode(), new ArrayList<>());
             clientMarkets.add(conclusionEntity.getCode());
             if(!wsList.contains(session)) wsList.add(session);  //session 중복 삽입 방지
-            OnMarketMap.map.put(conclusionEntity.getCode(), wsList);
+            MarketAndSessionMap.map.put(conclusionEntity.getCode(), wsList);
         }
         CLIENTS.put(session.getId(), clientMarkets);
 
