@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
 import upbit_candle.candle.WebSocket.RunSocketService;
-import upbit_candle.candle.Service.forTest.ForTest;
 import upbit_candle.candle.WebSocket.OnExecuteCoin;
 
 import java.nio.charset.Charset;
@@ -31,25 +30,6 @@ public class GetWsTradeController {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         Message message = new Message();
 
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("v2/recent-trade-stock")
-    public ResponseEntity<Message> loadTradeV2(@RequestParam(defaultValue = "1_000_000") String pivot) {
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        Message message = new Message();
-
-        try {
-            runSocket.runSocket(ForTest.initTestData(), Long.parseLong(pivot));
-        }catch (Exception e){
-            message.setMessage("잘못된 요청");
-            message.setStatus(StatusEnum.BAD_REQUEST);
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
-        }
-
-        message.setMessage("OK");
-        message.setStatus(StatusEnum.OK);
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 

@@ -1,28 +1,16 @@
 package upbit_candle.candle.WebSocket;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import org.w3c.dom.Text;
 import upbit_candle.candle.Entity.ConclusionEntity;
-import upbit_candle.candle.Service.WebSocketService;
-import upbit_candle.candle.WebSocketDto.SendDto;
 import upbit_candle.candle.WebSocketDto.WebSocketDto;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -30,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private static final ConcurrentHashMap<String, ArrayList<String>> CLIENTS = new ConcurrentHashMap<String,  ArrayList<String>>();
-    private final WebSocketService socketService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
