@@ -14,16 +14,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RunSocketService {
 
-//    private final WsListener webSocketListener;
+    private final WsListener webSocketListener;
     private final ConclusionService conclusionService;
     /*
     체결 내역
      */
     public void runSocket(List<String> marketList, Long pivot) throws InterruptedException{
         OkHttpClient client = new OkHttpClient();
-        WsListener webSocketListener = new WsListener(conclusionService);
-
-
 
         Request request = new Request.Builder()
                 .url("wss://api.upbit.com/websocket/v1")

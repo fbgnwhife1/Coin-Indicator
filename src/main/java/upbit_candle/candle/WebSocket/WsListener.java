@@ -18,6 +18,7 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import upbit_candle.candle.Entity.ConclusionEntity;
@@ -30,7 +31,7 @@ import upbit_candle.candle.Service.ConclusionService;
     https://sas-study.tistory.com/432
  */
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public final class WsListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
@@ -41,11 +42,7 @@ public final class WsListener extends WebSocketListener {
     private BigDecimal p;
     private List<String> codes;
 
-    private ConclusionService service;
-
-    public WsListener(ConclusionService service) {
-        this.service = service;
-    }
+    private final ConclusionService service;
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -62,10 +59,11 @@ public final class WsListener extends WebSocketListener {
     @SneakyThrows
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-        System.out.println("Socket Error : " + t.getMessage());
+        System.out.println("Socket Error : " + t.getMessage() + " socket Reconnecting...");
         webSocket.send(getParameter());
         Thread.sleep(2000);
     }
+
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
