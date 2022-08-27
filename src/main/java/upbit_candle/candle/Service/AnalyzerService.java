@@ -6,6 +6,7 @@ import upbit_candle.candle.Analyze.FearAndGreed.FearAndGreed;
 import upbit_candle.candle.Analyze.RSI.RSI;
 import upbit_candle.candle.ApiConnect.FearAndGreedApiConnect;
 import upbit_candle.candle.ApiConnect.OrderBookConnect;
+import upbit_candle.candle.Entity.Dto.RsiDataDto;
 import upbit_candle.candle.Entity.Result.OrderBookResult;
 import upbit_candle.candle.Repository.AnalyzeRepository;
 
@@ -25,7 +26,8 @@ public class AnalyzerService {
         Date startDatetime = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000 * period);
         Date endDatetime = new Date();
 
-        List<BigDecimal> conclusionList = analyzeRepository.findRSI(code, startDatetime, endDatetime);
+        List<RsiDataDto> rsiData = analyzeRepository.findRSI2(code, startDatetime, endDatetime);
+        List<BigDecimal> conclusionList = RsiDataDto.transData(rsiData, period);
         double[] prizes = new double[conclusionList.size()];
         for (int i = 0; i < prizes.length; i++) {
             prizes[i] = conclusionList.get(i).doubleValue();
