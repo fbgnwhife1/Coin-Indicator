@@ -1,4 +1,4 @@
-package upbit_candle.candle.WebSocket;
+package upbit_candle.candle.Service;
 
 import lombok.RequiredArgsConstructor;
 import okhttp3.OkHttpClient;
@@ -6,6 +6,7 @@ import okhttp3.Request;
 import org.springframework.stereotype.Service;
 import upbit_candle.candle.Entity.Result.Conclusion;
 import upbit_candle.candle.Service.ConclusionService;
+import upbit_candle.candle.WebSocket.WsListener;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +16,6 @@ import java.util.UUID;
 public class RunSocketService {
 
     private final WsListener webSocketListener;
-    private final ConclusionService conclusionService;
     /*
     체결 내역
      */

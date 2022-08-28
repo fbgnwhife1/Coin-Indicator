@@ -1,4 +1,4 @@
-package upbit_candle.candle.WebSocketDto;
+package upbit_candle.candle.WebSocket.WebSocketDto;
 
 
 import lombok.Data;

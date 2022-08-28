@@ -29,7 +29,7 @@ https://sigbtc.pro/derivatives
 * Spring Boot 2.7.2
 * spring-boot-starter-websocket
 * okhttp3
-* Spring Data jpa
+* Spring Data JPA
 * QueryDsl
  
  ## Reference

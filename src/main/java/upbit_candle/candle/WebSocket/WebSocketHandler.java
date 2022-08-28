@@ -8,7 +8,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import upbit_candle.candle.Entity.ConclusionEntity;
-import upbit_candle.candle.WebSocketDto.WebSocketDto;
+import upbit_candle.candle.WebSocket.WebSocketDto.WebSocketDto;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +27,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         ArrayList<String> marketList = CLIENTS.get(session.getId());
-        if(!marketList.isEmpty()) {
+        if(marketList!=null && !marketList.isEmpty()) {
             for (String market : marketList) {
                 MarketAndSessionMap.map.get(market).remove(session);
             }
