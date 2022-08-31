@@ -29,23 +29,22 @@ public class GetDataInit {
         private final MarketRepository marketRepository;
 
         public void openSocket() throws InterruptedException {
-            List<MarketEntity> all = marketRepository.findAll();
+//            List<MarketEntity> all = marketRepository.findAll();
+//            List<MarketEntity> all = marketRepository.findByMarketContaining("KRW");
+            List<String> all = List.of("KRW-BTC", "KRW-AXS", "KRW-XEM", "KRW-GAS", "KRW-ADA", "KRW-DKA", "KRW-FLOW", "KRW-DOGE", "KRW-XRP", "KRW-ETH", "KRW-SOL");
+
             List<String> marketList = new ArrayList<>();
 
-            for (MarketEntity market : all) {
-                marketList.add(market.getMarket());
+            for (String market : all) {
+                marketList.add(market);
 
-                if(marketList.size() == 15){
+                if(marketList.size() == 1){
                     runSocket.runSocket(marketList, 0L);
                     marketList.clear();
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                 }
             }
 
-            Thread.sleep(2000);
-            if(marketList.size() > 0){
-                runSocket.runSocket(marketList, 0L);
-            }
         }
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import upbit_candle.candle.Response.Message;
 import upbit_candle.candle.Response.StatusEnum;
-import upbit_candle.candle.Service.AnalyzerService;
+import upbit_candle.candle.Service.AnalyzeService;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class AnalyzeController {
 
-    private final AnalyzerService analyzerService;
+    private final AnalyzeService analyzeService;
 
     @GetMapping("v1/analyze/rsi/{marketId}")
     public ResponseEntity<Message> getRSI(@PathVariable String marketId, Integer period){
@@ -29,7 +29,7 @@ public class AnalyzeController {
 
         try {
             if(period == null) period = 14;
-            message.setData(analyzerService.RSI(marketId, period));
+            message.setData(analyzeService.RSI(marketId, period));
         }catch (Exception e){
             message.setMessage(e.getMessage());
             message.setStatus(StatusEnum.BAD_REQUEST);
@@ -48,7 +48,7 @@ public class AnalyzeController {
         Message message = new Message();
 
         try {
-            message.setData(analyzerService.BSI(marketId));
+            message.setData(analyzeService.BSI(marketId));
         }catch (Exception e){
             message.setMessage(e.getMessage());
             message.setStatus(StatusEnum.BAD_REQUEST);
@@ -67,7 +67,7 @@ public class AnalyzeController {
         Message message = new Message();
 
         try {
-            message.setData(analyzerService.getFnG());
+            message.setData(analyzeService.getFnG());
         }catch (Exception e){
             message.setMessage(e.getMessage());
             message.setStatus(StatusEnum.BAD_REQUEST);

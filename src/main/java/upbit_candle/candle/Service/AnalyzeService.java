@@ -16,10 +16,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AnalyzerService {
+public class AnalyzeService {
     private final AnalyzeRepository analyzeRepository;
-    private OrderBookConnect orderBookService = new OrderBookConnect();
-    private FearAndGreedApiConnect fearAndGreedApiConnect = new FearAndGreedApiConnect();
+    private final OrderBookConnect orderBookService = new OrderBookConnect();
+    private final FearAndGreedApiConnect fearAndGreedApiConnect = new FearAndGreedApiConnect();
 
     public double RSI(String code, Integer period) {
         RSI rsi = new RSI(Integer.parseInt(String.valueOf(period)));
@@ -49,7 +49,6 @@ public class AnalyzerService {
     }
 
     public FearAndGreed getFnG(){
-        FearAndGreed fgIndex = fearAndGreedApiConnect.getFGIndex();
-        return fgIndex;
+        return fearAndGreedApiConnect.getFGIndex();
     }
 }

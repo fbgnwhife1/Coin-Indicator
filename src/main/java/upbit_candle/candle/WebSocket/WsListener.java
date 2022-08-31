@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
@@ -60,6 +61,7 @@ public final class WsListener extends WebSocketListener {
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         System.out.println("Socket Error : " + t.getMessage() + " socket Reconnecting...");
+//        this.json = gson.toJson(List.of(Ticket.of(UUID.randomUUID().toString()), Type.of(conclusion, codes)));
         webSocket.send(getParameter());
         Thread.sleep(2000);
     }
