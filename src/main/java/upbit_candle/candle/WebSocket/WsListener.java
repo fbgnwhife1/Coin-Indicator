@@ -3,47 +3,42 @@ package upbit_candle.candle.WebSocket;
 
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.gson.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.gson.Gson;
-import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
 import okio.ByteString;
-import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import upbit_candle.candle.Entity.ConclusionEntity;
 import upbit_candle.candle.Entity.Result.Conclusion;
 import upbit_candle.candle.Entity.Result.TradeResult;
-import upbit_candle.candle.Service.ConclusionService;
 
 /*
     ref.
     https://sas-study.tistory.com/432
  */
 
-@Component
 @RequiredArgsConstructor
 public final class WsListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private String json;
     private Conclusion conclusion;
     private ConclusionEntity cResult;
     private BigDecimal p;
-    private List<String> codes;
 
-    private final ConclusionService service;
+    private final RabbitTemplate rabbitTemplate;
+    private static final String topicExchangeName = "market.exchange";
+
+    private int errorCount = 0;
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -61,9 +56,9 @@ public final class WsListener extends WebSocketListener {
     @Override
     public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
         System.out.println("Socket Error : " + t.getMessage() + " socket Reconnecting...");
-//        this.json = gson.toJson(List.of(Ticket.of(UUID.randomUUID().toString()), Type.of(conclusion, codes)));
+
+        webSocket.cancel();
         webSocket.send(getParameter());
-        Thread.sleep(2000);
     }
 
 
@@ -80,26 +75,17 @@ public final class WsListener extends WebSocketListener {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
-                ArrayList<WebSocketSession> list = MarketAndSessionMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
-                if(list.size() != 0){
-                    for (WebSocketSession ws : list) {
-                        if(ws == null) continue;
-                        if(BigDecimal.valueOf(MarketAndSessionMap.pivotMap.getOrDefault(ws.getId(), 0L))
-                                .compareTo(cResult.getReal_price()) > 0) continue;
+                rabbitTemplate.convertAndSend(topicExchangeName, "market."+cResult.getCode(), cResult);
 
-                        ws.sendMessage(new TextMessage(gson.toJson(cResult)));
-                    }
-                }
-
-                if(cResult.getReal_price().compareTo(p) < 0) break;
-                service.save(cResult);
+//                service.save(cResult);
 //                System.out.println(tradeResult);
                 break;
             default:
                 throw new RuntimeException("지원하지 않는 웹소켓 조회 유형입니다. : " + conclusion.getType());
         }
-
     }
+
+
 
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
@@ -109,7 +95,6 @@ public final class WsListener extends WebSocketListener {
 
     public void setParameter(String UUID, Conclusion conclusion, List<String> codes, Long pivot) {
         this.conclusion = conclusion;
-        this.codes = codes;
         this.json = gson.toJson(List.of(Ticket.of(UUID), Type.of(conclusion, codes)));
         this.p = new BigDecimal(pivot);
     }
@@ -121,6 +106,18 @@ public final class WsListener extends WebSocketListener {
 
     public ConclusionEntity getcResult(){
         return this.cResult;
+    }
+
+    public void reRun(List<String> marketList, Long pivot) throws InterruptedException{
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("wss://api.upbit.com/websocket/v1")
+                .build();
+
+        this.setParameter(UUID.randomUUID().toString(), Conclusion.trade, marketList, pivot);
+        client.newWebSocket(request, this);
+        client.dispatcher().executorService().shutdown();
     }
 
     @Data(staticConstructor = "of")

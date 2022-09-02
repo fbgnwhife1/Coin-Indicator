@@ -22,7 +22,7 @@ public class AnalyzeService {
     private final FearAndGreedApiConnect fearAndGreedApiConnect = new FearAndGreedApiConnect();
 
     public double RSI(String code, Integer period) {
-        RSI rsi = new RSI(Integer.parseInt(String.valueOf(period)));
+        RSI rsi = new RSI(period);
         Date startDatetime = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000 * period);
         Date endDatetime = new Date();
 

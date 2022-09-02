@@ -30,13 +30,13 @@ public class GetDataInit {
 
         public void openSocket() throws InterruptedException {
 //            List<MarketEntity> all = marketRepository.findAll();
-//            List<MarketEntity> all = marketRepository.findByMarketContaining("KRW");
-            List<String> all = List.of("KRW-BTC", "KRW-AXS", "KRW-XEM", "KRW-GAS", "KRW-ADA", "KRW-DKA", "KRW-FLOW", "KRW-DOGE", "KRW-XRP", "KRW-ETH", "KRW-SOL");
+            List<MarketEntity> all = marketRepository.findByMarketContaining("KRW");
+//            List<String> all = List.of("KRW-BTC", "KRW-AXS", "KRW-XEM", "KRW-GAS", "KRW-ADA", "KRW-DKA", "KRW-FLOW", "KRW-DOGE", "KRW-XRP", "KRW-ETH", "KRW-SOL");
 
             List<String> marketList = new ArrayList<>();
 
-            for (String market : all) {
-                marketList.add(market);
+            for (MarketEntity market : all) {
+                marketList.add(market.getMarket());
 
                 if(marketList.size() == 1){
                     runSocket.runSocket(marketList, 0L);

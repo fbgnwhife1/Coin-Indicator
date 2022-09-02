@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,7 +16,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 public class ConclusionEntity {
-
     @Id
     @GeneratedValue
     private Long id;
