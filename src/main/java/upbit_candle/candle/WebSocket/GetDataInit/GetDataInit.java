@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import upbit_candle.candle.Entity.MarketEntity;
 import upbit_candle.candle.Repository.MarketRepository;
-import upbit_candle.candle.Service.RunSocketService;
+import upbit_candle.candle.WebSocket.RunSocket;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -25,25 +25,27 @@ public class GetDataInit {
     @Transactional
     @RequiredArgsConstructor
     static class InitService {
-        private final RunSocketService runSocket;
+        private final RunSocket runSocket;
         private final MarketRepository marketRepository;
 
         public void openSocket() throws InterruptedException {
-//            List<MarketEntity> all = marketRepository.findAll();
-            List<MarketEntity> all = marketRepository.findByMarketContaining("KRW");
+            List<MarketEntity> all = marketRepository.findAll();
+//            List<MarketEntity> all = marketRepository.findByMarketContaining("KRW");
 
             List<String> marketList = new ArrayList<>();
 
             for (MarketEntity market : all) {
                 marketList.add(market.getMarket());
 
-                if(marketList.size() == 1){
+                if(marketList.size() == 15){
                     runSocket.runSocket(marketList, 0L);
                     marketList.clear();
                     Thread.sleep(1000);
                 }
             }
-
+            if(!marketList.isEmpty()){
+                runSocket.runSocket(marketList, 0L);
+            }
         }
     }
 }

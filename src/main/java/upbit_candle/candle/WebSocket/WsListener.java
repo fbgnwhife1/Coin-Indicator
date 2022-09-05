@@ -33,12 +33,8 @@ public final class WsListener extends WebSocketListener {
     private String json;
     private Conclusion conclusion;
     private ConclusionEntity cResult;
-    private BigDecimal p;
-
     private final RabbitTemplate rabbitTemplate;
     private static final String topicExchangeName = "market.exchange";
-
-    private int errorCount = 0;
 
     @Override
     public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
@@ -76,48 +72,25 @@ public final class WsListener extends WebSocketListener {
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
                 rabbitTemplate.convertAndSend(topicExchangeName, "market."+cResult.getCode(), cResult);
-
-//                service.save(cResult);
-//                System.out.println(tradeResult);
                 break;
             default:
                 throw new RuntimeException("지원하지 않는 웹소켓 조회 유형입니다. : " + conclusion.getType());
         }
     }
 
-
-
     @Override
     public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
         webSocket.send(getParameter());
-//        webSocket.close(NORMAL_CLOSURE_STATUS, null); // 없을 경우 끊임없이 서버와 통신함
     }
 
     public void setParameter(String UUID, Conclusion conclusion, List<String> codes, Long pivot) {
         this.conclusion = conclusion;
         this.json = gson.toJson(List.of(Ticket.of(UUID), Type.of(conclusion, codes)));
-        this.p = new BigDecimal(pivot);
     }
 
     private String getParameter() {
         System.out.println(json);
         return this.json;
-    }
-
-    public ConclusionEntity getcResult(){
-        return this.cResult;
-    }
-
-    public void reRun(List<String> marketList, Long pivot) throws InterruptedException{
-        OkHttpClient client = new OkHttpClient();
-
-        Request request = new Request.Builder()
-                .url("wss://api.upbit.com/websocket/v1")
-                .build();
-
-        this.setParameter(UUID.randomUUID().toString(), Conclusion.trade, marketList, pivot);
-        client.newWebSocket(request, this);
-        client.dispatcher().executorService().shutdown();
     }
 
     @Data(staticConstructor = "of")
