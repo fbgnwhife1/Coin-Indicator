@@ -71,7 +71,7 @@ public final class WsListener extends WebSocketListener {
             case trade:
                 TradeResult tradeResult = gson.fromJson(bytes.string(StandardCharsets.UTF_8), TradeResult.class);
                 cResult = new ConclusionEntity(tradeResult.getCode(), tradeResult.getTrade_timestamp(), tradeResult.getTrade_price(), tradeResult.getTrade_volume(), tradeResult.getAsk_bid(), tradeResult.getTrade_date(), tradeResult.getTrade_time());
-                rabbitTemplate.convertAndSend(topicExchangeName, "market."+cResult.getCode(), cResult);
+                rabbitTemplate.convertAndSend(topicExchangeName, "market.*", cResult);
                 break;
             default:
                 throw new RuntimeException("지원하지 않는 웹소켓 조회 유형입니다. : " + conclusion.getType());
