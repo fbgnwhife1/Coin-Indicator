@@ -6,16 +6,13 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class MarketAndSessionMap {
-
-
-    private static final MarketAndSessionMap object = new MarketAndSessionMap();
+public class OrderBookSessionMap {
+    private static final OrderBookSessionMap object = new OrderBookSessionMap();
     public static Map<String, ArrayList<WebSocketSession>> map = new ConcurrentHashMap<>();
-    public static Map<String, Long> pivotMap = new ConcurrentHashMap<String, Long>();
 
-    private MarketAndSessionMap(){}
+    private OrderBookSessionMap(){}
 
-    public static MarketAndSessionMap getSingleTon(){
+    public OrderBookSessionMap getSingleTon(){
         return object;
     }
 }

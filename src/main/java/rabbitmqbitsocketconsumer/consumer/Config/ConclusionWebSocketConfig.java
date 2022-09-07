@@ -2,19 +2,19 @@ package rabbitmqbitsocketconsumer.consumer.Config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import rabbitmqbitsocketconsumer.consumer.WebSocket.ConclusionWebSocketHandler;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
-    private final WebSocketHandler webSocketHandler;
+public class ConclusionWebSocketConfig implements WebSocketConfigurer {
+    private final ConclusionWebSocketHandler conclusionWebSocketHandler;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "socket-service/ws/v1").setAllowedOrigins("*");
+        registry.addHandler(conclusionWebSocketHandler, "socket-service/ws/v1/conclusion").setAllowedOrigins("*");
     }
 }

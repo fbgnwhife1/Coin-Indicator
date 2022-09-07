@@ -8,6 +8,6 @@ import java.util.ArrayList;
 
 @Data
 public class WebSocketDto {
-    private ArrayList<ConclusionEntity> list;
+    private ArrayList<String> list;
     private Long pivot;
 }
