@@ -28,7 +28,7 @@ public class OrderBookListener {
 
     @RabbitListener(queues = queueName)
     public void receive(BSI_RBIDto dto) throws IOException {
-        log.info("{}", dto);
+//        log.info("{}", dto);
         ArrayList<WebSocketSession> list = OrderBookSessionMap.map.computeIfAbsent(dto.getMarket(), k -> new ArrayList<>());
         if(list.size() != 0){
             for (WebSocketSession ws : list) {
