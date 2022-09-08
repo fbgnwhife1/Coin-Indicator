@@ -15,14 +15,11 @@ https://sigbtc.pro/derivatives
 (http://koreascience.or.kr/article/JAKO201922441756714.pdf)
 
 ## Usage
-* url : ws://localhost:{gateway-port}/ws/v1
-* ex) request : {
-            "list" : [
-            {"code" : "KRW-BTC"}, 
-            {"code" : "KRW-DOGE"}, 
-            {"code" : "KRW-ETH"}],
-            pivot : 2000000
-            }
+* url : ws://localhost:{gateway-port}/ws/v1/conclusion
+* ex) request : { "list" : [ "KRW-BTC", "KRW-DOGE", "KRW-ETH"], pivot : 2000000 }
+* url : ws://localhost:{gateway-port}/ws/v1/bsi
+* ex) request : { marketList : ["KRW-BTC", "KRW-DOGE", "KRW-ETH"] }  
+
 * RSI - http://localhost:{gateway-port}/v1/analyze/rsi/KRW-BTC
 * BSI - http://localhost:{gateway-port}/v1/analyze/bsi/KRW-BTC
  
