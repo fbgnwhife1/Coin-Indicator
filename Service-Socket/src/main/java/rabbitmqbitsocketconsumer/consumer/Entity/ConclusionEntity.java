@@ -2,6 +2,7 @@ package rabbitmqbitsocketconsumer.consumer.Entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rabbitmqbitsocketconsumer.consumer.WebSocket.WebSocketDto.SendDto;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,5 +38,9 @@ public class ConclusionEntity{
         this.real_price = trade_price.multiply(trade_volume);
         String temp = trade_date + " " + trade_time;
         this.date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(temp);
+    }
+
+    public SendDto toDto() {
+        return new SendDto(code, real_price, date, trade_price, trade_volume);
     }
 }

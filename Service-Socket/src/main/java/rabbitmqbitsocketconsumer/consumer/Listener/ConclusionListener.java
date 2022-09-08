@@ -27,16 +27,19 @@ public class ConclusionListener {
 
     @RabbitListener(queues = queueName)
     public void receive(ConclusionEntity cResult) throws IOException {
-        log.info("{}", cResult);
+//        log.info("{}", cResult);
         conclusionRepository.save(cResult);
         ArrayList<WebSocketSession> list = MarketAndSessionMap.map.computeIfAbsent(cResult.getCode(), k -> new ArrayList<>());
         if(list.size() != 0){
             for (WebSocketSession ws : list) {
                 if(ws == null) continue;
+                if(!ws.isOpen()){
+                    continue;
+                }
                 if(BigDecimal.valueOf(MarketAndSessionMap.pivotMap.getOrDefault(ws.getId(), 0L))
                         .compareTo(cResult.getReal_price()) > 0) continue;
 
-                ws.sendMessage(new TextMessage(gson.toJson(cResult)));
+                ws.sendMessage(new TextMessage(gson.toJson(cResult.toDto())));
             }
         }
     }

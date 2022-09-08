@@ -35,6 +35,7 @@ public class ConclusionWebSocketHandler extends TextWebSocketHandler {
 
         CLIENTS.remove(session.getId());
         MarketAndSessionMap.pivotMap.remove(session.getId());
+        session.close();
     }
 
     @Override
